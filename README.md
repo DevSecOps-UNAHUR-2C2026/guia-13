@@ -1,7 +1,7 @@
 # TP 13 - Gobernanza de Procesos y Tríada CIA
 
-**Asignatura:** DevSecOps  
-**Carrera:** Licenciatura en Ciberseguridad — Universidad Nacional de Hurlingham (UNAHUR)  
+**Materia:** DevSecOps  
+**Carrera:** Licenciatura en Ciberseguridad - Universidad Nacional de Hurlingham (UNAHUR)  
 
 ---
 
