@@ -94,10 +94,4 @@ reporte_cpu
 reporte_disco
 
 echo "Mantenimiento terminado correctamente."
----
 
-### Pasos para aplicarlo y verificarlo:
-
-1. **Editar el archivo:**
-   ```bash
-   nano sistema.sh
