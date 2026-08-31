@@ -30,12 +30,11 @@ Se implementó el script de mantenimiento encargado de respaldar la base de dato
 En cuanto a su robustecimiento, la versión base utilizaba una ruta relativa fija (`--project-directory app`), lo que provocaba una falla crítica de ejecución si el operador corría la rutina fuera del directorio previsto. La versión mejorada parametriza la ubicación mediante la variable absoluta `COMPOSE_DIR="/home/alumno/Operaciones-1-guia-hecha/guia-06"`, otorgando determinismo al script para tareas interactivas o desatendidas (`cron`). Asimismo, la incorporación de `set -euo pipefail` previene que fallos intermedios generen volcados corruptos, y las funciones de telemetría de CPU y disco agrupan las métricas bajo encabezados estandarizados con marcas temporales para simplificar auditorías.
 
 ### Paso 2: Análisis Manual de Seguridad DAST (OWASP ZAP)
-Con la aplicación activa localmente, se desplegó OWASP ZAP (v2.17.0 bajo OpenJDK 17) en `$HOME/.local/opt` y se realizó una exploración manual (*Manual Explore*) interactuando con las rutas del frontend y la API REST.
+Con la aplicación activa localmente, se desplegó OWASP ZAP (v2.17.0 bajo OpenJDK 17) en `$HOME/.local/opt` y se realizó una exploración manual (*Manual Explore*).
 
 Durante la auditoría de caja negra se identificaron alertas de seguridad relevantes:
-* *Missing Anti-clickjacking Header (Media):* Ausencia de `X-Frame-Options` o `Content-Security-Policy: frame-ancestors`. *Mitigación:* Configurar en el servidor web `X-Frame-Options: SAMEORIGIN` o `DENY`.
-* *Content-Security-Policy (CSP) Header Not Set (Media):* Falta de directivas restrictivas contra Cross-Site Scripting (XSS). *Mitigación:* Definir una política `Content-Security-Policy: default-src 'self'`.
-* *X-Content-Type-Options Header Missing (Baja):* Exposición a MIME-sniffing. *Mitigación:* Inyectar `X-Content-Type-Options: nosniff` en todas las respuestas HTTP.
+* *El servidor filtra información de versión a través del campo "Server" del encabezado de respuesta HTTP
+* *Falta encabezado X-Content-Type-Options
 
 ### Paso 3: Confidencialidad y Principio de Privilegio Mínimo
 Se restringió el acceso a nivel de sistema operativo para que las operaciones de despliegue no dependan del superusuario `root`. Para ello, se creó el usuario no privilegiado `devops-deploy` perteneciente al grupo `deploy-team` y se protegió el archivo sensible `/opt/deploy-app/config/app.conf` asignándole propiedad exclusiva y permisos octales estrictos `600` (`-rw-------`), impidiendo que otros usuarios locales puedan visualizar credenciales.
